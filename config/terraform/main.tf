@@ -49,17 +49,17 @@ resource "aws_instance" "web" {
   # In this case, we just install docker and start it.
   provisioner "remote-exec" {
     inline = [
-      "sudo apt-get -y update",
-      "sudo apt-get -y install apt-transport-https ca-certificates",
-      "sudo apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D",
-      "sudo echo 'deb https://apt.dockerproject.org/repo ubuntu-trusty main' > /etc/apt/sources.list.d/docker.list",
-      "sudo apt-get -y update",
+      "sudo su",
+      "apt-get -y update",
+      "apt-get -y install apt-transport-https ca-certificates",
+      "apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D",
+      "echo 'deb https://apt.dockerproject.org/repo ubuntu-trusty main' > /etc/apt/sources.list.d/docker.list",
+      "apt-get -y update",
       "apt-cache policy docker-engine",
-      "sudo apt-get -y update",
-      "sudo apt-get install -y linux-image-extra-$(uname -r) linux-image-extra-virtual",
-      "sudo apt-get install -y docker-engine",
-      "sudo gpasswd -a ubuntu docker",
-      "sudo service docker restart"
+      "apt-get -y update",
+      "apt-get install -y linux-image-extra-$(uname -r) linux-image-extra-virtual",
+      "gpasswd -a ubuntu docker",
+      "service docker restart"
     ]
   }
 }
