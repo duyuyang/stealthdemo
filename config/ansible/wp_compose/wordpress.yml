@@ -1,0 +1,36 @@
+- name: Run wordpress containers with inline v2 compose
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  tasks:
+    - docker_service:
+        project_name: wordpress
+        definition:
+          version: '2'
+          services:
+            db:
+              image: mysql:5.7
+              volumes:
+                - "./.data/db:/var/lib/mysql"
+              environment:
+                MYSQL_ROOT_PASSWORD: wordpress
+                MYSQL_DATABASE: wordpress
+                MYSQL_USER: wordpress
+                MYSQL_PASSWORD: wordpress
+            web:
+              image: wordpress:latest
+              ports:
+                - "80:80"
+              depends_on:
+                - db
+              environment:
+                WORDPRESS_DB_HOST: db
+                WORDPRESS_DB_PASSWORD: wordpress
+      register: output
+
+    - debug: var=output
+
+    - assert:
+        that:
+          - "web.wordpress_web_1.state.running"
+          - "db.wordpress_db_1.state.running"

@@ -16,3 +16,6 @@ scale_desire: 1
 scale_max: 1
 scale_min: 1
 sshkey: 'duy-demo'
+
+app_name: 'wordpress'
+app_version: '0.0.1'

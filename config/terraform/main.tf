@@ -11,6 +11,7 @@ resource "aws_elb" "web" {
   subnets         = ["subnet-7146ee15", "subnet-2272a454"]
   security_groups = ["sg-296c574d"]
   instances       = ["${aws_instance.web.id}"]
+  count           = "${var.num_servers}"
 
   listener {
     instance_port     = 80
@@ -30,7 +31,7 @@ resource "aws_instance" "web" {
     # The connection will use the local SSH agent for authentication.
   }
 
-  instance_type = "t2.micro"
+  instance_type = "${var.server_size}"
 
   # Lookup the correct AMI based on the region
   # we specified
@@ -46,13 +47,29 @@ resource "aws_instance" "web" {
   subnet_id = "subnet-2746ee43"
 
   # We run a remote provisioner on the instance after creating it.
-  # In this case, we just install nginx and start it. By default,
-  # this should be on port 80
+  # In this case, we just install docker and start it.
   provisioner "remote-exec" {
     inline = [
       "sudo apt-get -y update",
-      "sudo apt-get -y install nginx",
-      "sudo service nginx start",
+      "sudo apt-get -y install apt-transport-https ca-certificates",
+      "sudo apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D",
+      "sudo touch /etc/apt/sources.list.d/docker.list",
+      "sudo chmod 0666 /etc/apt/sources.list.d/docker.list",
+      "sudo echo 'deb https://apt.dockerproject.org/repo ubuntu-trusty main' > /etc/apt/sources.list.d/docker.list",
+      "sudo apt-get -y update",
+      "apt-cache policy docker-engine",
+      "sudo apt-get -y update",
+      "sudo apt-get install -y linux-image-extra-$(uname -r) linux-image-extra-virtual",
+      "sudo apt-get install -y docker-engine",
+      "sudo gpasswd -a ubuntu docker",
+      "sudo service docker restart",
+      "sudo apt-add-repository ppa:ansible/ansible -y",
+      "sudo apt-get -y update",
+      "sudo apt-get install -y ansible python-pip",
+      "sudo pip install docker-compose",
+      "sudo pip install docker-py==1.9.0",
+      "git clone git://github.com/duyuyang/stealthdemo.git",
+      "ansible-playbook stealthdemo/config/ansible/wp_compose/wordpress.yml -i stealthdemo/config/ansible/wp_compose/hosts"
     ]
   }
 }
