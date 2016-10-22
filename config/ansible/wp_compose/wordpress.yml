@@ -4,6 +4,11 @@
   gather_facts: no
   tasks:
     - docker_service:
+        project_src: /home/ubuntu/stealthdemo/config/ansible/wp_compose/
+        project_name: wordpress
+        state: present
+        
+    - docker_service:
         project_name: wordpress
         definition:
           version: '2'
