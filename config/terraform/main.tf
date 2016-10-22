@@ -26,7 +26,7 @@ resource "aws_instance" "web" {
   connection {
     # The default username for our AMI
     user = "ubuntu"
-
+    key_file = "/home/ubuntu/.ssh/${var.key_name}.pem"
     # The connection will use the local SSH agent for authentication.
   }
 
