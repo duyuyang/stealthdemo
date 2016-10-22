@@ -9,7 +9,7 @@ if [ "$#" != '4' ]; then
   exit 1
 fi
 
-if [[ -n ${AWS_ACCESS_KEY} || -n ${AWS_SECRET_KEY} ]]; then
+if [[ -z ${AWS_ACCESS_KEY} || -z ${AWS_SECRET_KEY} ]]; then
   echo "Please set AWS access key and secret key as environment variables"
   exit 1
 fi
@@ -29,3 +29,4 @@ terraform apply -var "aws_access_key=${AWS_ACCESS_KEY}" \
 
 # clean up
 # terraform destroy -var "aws_access_key=${AWS_ACCESS_KEY}" -var "aws_secret_key=${AWS_SECRET_KEY}" config/terraform/
+# terraform apply -var "aws_access_key=${AWS_ACCESS_KEY}"   -var "aws_secret_key=${AWS_SECRET_KEY}" config/terraform/
