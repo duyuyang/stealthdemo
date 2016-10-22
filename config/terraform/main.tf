@@ -51,8 +51,11 @@ resource "aws_instance" "web" {
   provisioner "remote-exec" {
     inline = [
       "sudo apt-get -y update",
-      "sudo apt-get -y install nginx",
-      "sudo service nginx start",
+      "sudo apt-get -y install git python-yaml python-jinja2 python-pycurl",
+      "git clone https://github.com/ansible/ansible.git --recursive"
+      "cd ansible",
+      "source ./hacking/env-setup",
+      "ansible-galaxy install angstwad.docker_ubuntu"
     ]
   }
 }

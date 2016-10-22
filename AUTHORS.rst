@@ -2,4 +2,4 @@
 Developers
 ==========
 
-* Du Yuyang <du.yuyang@auspost.com.au>
+* Du Yuyang <du.r.yuyang@gmail.com>
