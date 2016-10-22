@@ -6,6 +6,16 @@ variable "aws_secret_key" {
   description = "AWS secret key."
 }
 
+variable "server_size" {
+  description = "EC2 instance size."
+  default = "t2.micro"
+}
+
+variable "num_servers" {
+  description = "Number of instance register behind ELB"
+  default = 1
+}
+
 variable "key_name" {
   description = "Desired name of AWS key pair"
   default = "duy-demo"
