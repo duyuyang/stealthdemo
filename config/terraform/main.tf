@@ -46,16 +46,20 @@ resource "aws_instance" "web" {
   subnet_id = "subnet-2746ee43"
 
   # We run a remote provisioner on the instance after creating it.
-  # In this case, we just install nginx and start it. By default,
-  # this should be on port 80
+  # In this case, we just install docker and start it.
   provisioner "remote-exec" {
     inline = [
       "sudo apt-get -y update",
-      "sudo apt-get -y install git python-yaml python-jinja2 python-pycurl",
-      "git clone https://github.com/ansible/ansible.git --recursive",
-      "cd ansible",
-      "source ./hacking/env-setup",
-      "ansible-galaxy install angstwad.docker_ubuntu"
+      "sudo apt-get -y install apt-transport-https ca-certificates",
+      "sudo apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D",
+      "sudo echo "deb https://apt.dockerproject.org/repo ubuntu-trusty main" > /etc/apt/sources.list.d/docker.list",
+      "sudo apt-get -y update",
+      "apt-cache policy docker-engine",
+      "sudo apt-get -y update",
+      "sudo apt-get install -y linux-image-extra-$(uname -r) linux-image-extra-virtual",
+      "sudo apt-get install -y docker-engine",
+      "sudo gpasswd -a ubuntu docker",
+      "sudo service docker restart"
     ]
   }
 }
