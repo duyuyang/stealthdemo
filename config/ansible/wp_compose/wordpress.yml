@@ -12,7 +12,7 @@
               image: mysql:5.7
               volumes:
                 - "./.data/db:/var/lib/mysql"
-              env:
+              environment:
                 MYSQL_ROOT_PASSWORD: wordpress
                 MYSQL_DATABASE: wordpress
                 MYSQL_USER: wordpress
@@ -23,8 +23,8 @@
                 - "80:80"
               depends_on:
                 - db
-              env:
-                WORDPRESS_DB_HOST: db:3306
+              environment:
+                WORDPRESS_DB_HOST: db
                 WORDPRESS_DB_PASSWORD: wordpress
       register: output
 
