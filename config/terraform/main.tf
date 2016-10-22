@@ -11,6 +11,7 @@ resource "aws_elb" "web" {
   subnets         = ["subnet-7146ee15", "subnet-2272a454"]
   security_groups = ["sg-296c574d"]
   instances       = ["${aws_instance.web.id}"]
+  count           = "${var.num_servers}"
 
   listener {
     instance_port     = 80

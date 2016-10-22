@@ -26,4 +26,9 @@ terraform apply -var "aws_access_key=${AWS_ACCESS_KEY}" \
                 -var "num_servers=${num_servers}" \
                 -var "server_size=${server_size}" \
                 config/terraform/
-ansible-playbook config/ansible/wordpress/wordpress.yml
+
+ansible-playbook config/ansible/wp_compose/wordpress.yml -i config/ansible/wp_compose/hosts
+
+
+# clean up
+# terraform destroy -var "aws_access_key=${AWS_ACCESS_KEY}" -var "aws_secret_key=${AWS_SECRET_KEY}" config/terraform/
