@@ -66,10 +66,11 @@ resource "aws_instance" "web" {
       "sudo apt-add-repository ppa:ansible/ansible -y",
       "sudo apt-get -y update",
       "sudo apt-get install -y ansible python-pip",
-      "sudo pip install docker-compose",
-      "sudo pip install docker-py==1.9.0",
+      "sudo pip install docker-compose==1.8.1",
+      "sudo pip install docker-py==1.10.4",
+      "sudo pip install requests==2.7.0",
       "git clone git://github.com/duyuyang/stealthdemo.git",
-      "ansible-playbook stealthdemo/config/ansible/wp_compose/wordpress.yml -i stealthdemo/config/ansible/wp_compose/hosts"
+      "docker-compose -f stealthdemo/config/ansible/wp_compose/docker-compose.yml up -d"
     ]
   }
 }
