@@ -62,7 +62,13 @@ resource "aws_instance" "web" {
       "sudo apt-get install -y linux-image-extra-$(uname -r) linux-image-extra-virtual",
       "sudo apt-get install -y docker-engine",
       "sudo gpasswd -a ubuntu docker",
-      "sudo service docker restart"
+      "sudo service docker restart",
+      "sudo apt-add-repository ppa:ansible/ansible -y",
+      "sudo apt-get -y update",
+      "sudo apt-get install -y ansible python-pip",
+      "sudo pip install docker-compose",
+      "git clone git://github.com/duyuyang/stealthdemo.git",
+      ""
     ]
   }
 }

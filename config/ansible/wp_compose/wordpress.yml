@@ -1,23 +1,36 @@
-- name: "Launch database container"
-  docker:
-    name: db
-    image: mysql:5.7
-    volumes:
-      - "./.data/db:/var/lib/mysql"
-    env:
-      MYSQL_ROOT_PASSWORD: wordpress
-      MYSQL_DATABASE: wordpress
-      MYSQL_USER: wordpress
-      MYSQL_PASSWORD: wordpress
+- name: Run wordpress containers with inline v2 compose
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  tasks:
+    - docker_service:
+        project_name: wordpress
+        definition:
+          version: '2'
+          services:
+            db:
+              image: mysql:5.7
+              volumes:
+                - "./.data/db:/var/lib/mysql"
+              env:
+                MYSQL_ROOT_PASSWORD: wordpress
+                MYSQL_DATABASE: wordpress
+                MYSQL_USER: wordpress
+                MYSQL_PASSWORD: wordpress
+            web:
+              image: wordpress:latest
+              ports:
+                - "80:80"
+              depends_on:
+                - db
+              env:
+                WORDPRESS_DB_HOST: db:3306
+                WORDPRESS_DB_PASSWORD: wordpress
+      register: output
 
-- name: "Launch wordpress container"
-  docker:
-    name: wordpress
-    image: wordpress:latest
-    links:
-      - db:mysql
-    ports:
-      - 80:80
-    env:
-      WORDPRESS_DB_HOST: db:3306
-      WORDPRESS_DB_PASSWORD: wordpress
+    - debug: var=output
+
+    - assert:
+        that:
+          - "web.wordpress_web_1.state.running"
+          - "db.wordpress_db_1.state.running"
