@@ -16,3 +16,8 @@ scale_desire: 1
 scale_max: 1
 scale_min: 1
 sshkey: 'duy-demo'
+aws_access_key: 'AKIAIHUZCJJQPLSB5SKQ'
+aws_secret_key: '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'
+
+app_name: 'wordpress'
+app_version: '0.0.1'
