@@ -9,14 +9,35 @@
 """
 
 import sys
-from setuptools import setup
+from setuptools import setup, find_packages
+import stealthdemo
 
+requires = []
 
 def setup_package():
-    needs_sphinx = {'build_sphinx', 'upload_docs'}.intersection(sys.argv)
-    sphinx = ['sphinx'] if needs_sphinx else []
-    setup(setup_requires=['six', 'pyscaffold>=2.5a0,<2.6a0'] + sphinx,
-          use_pyscaffold=True)
+    setup(
+        name='ea-release',
+        version=stealthdemo.__version__,
+        description='The command line tool for cloud automation',
+        url='https://bitbucket.org/duyuyang/stealthdemo',
+        author='Du Yuyang',
+        author_email='du.r.yuyang@gmail.com',
+        scripts=['bin/cloudci'],
+        install_requires=requires,
+        packages=find_packages(exclude=['tests*']),
+        classifiers=[
+            'Development Status :: 5 - Production/Stable',
+            'Intended Audience :: Developers',
+            'Natural Language :: English',
+            'License :: OSI Approved :: MIT License',
+            'Operating System :: OS Independent',
+            'Programming Language :: Python',
+            'Programming Language :: Python :: 2',
+            'Programming Language :: Python :: 2.6',
+            'Programming Language :: Python :: 2.7',
+            'Topic :: Software Development :: Libraries :: Python Modules',
+        ],
+    )
 
 
 if __name__ == "__main__":
