@@ -49,6 +49,9 @@ resource "aws_instance" "web" {
   # We run a remote provisioner on the instance after creating it.
   # In this case, we just install docker and start it.
   provisioner "remote-exec" {
+    connection {
+      user = "ubuntu"
+   }
     inline = [
       "sudo apt-get -y update",
       "sudo apt-get -y install apt-transport-https ca-certificates",
@@ -68,7 +71,11 @@ resource "aws_instance" "web" {
       "sudo apt-get install -y ansible python-pip",
       "sudo pip install docker-compose==1.8.1",
       "sudo pip install docker-py==1.10.4",
-      "sudo pip install requests==2.7.0",
+      "sudo pip install requests==2.7.0"      
+    ]
+  }
+  provisioner "remote-exec" {
+    inline = [
       "git clone git://github.com/duyuyang/stealthdemo.git",
       "docker-compose -f stealthdemo/config/ansible/wp_compose/docker-compose.yml up -d"
     ]
