@@ -59,5 +59,5 @@ class InventoryGenerator(object):
 
 if __name__ == '__main__':
     IG = InventoryGenerator('config/ansible/hosts',
-                            'terraform.tfstate.backup')
+                            'terraform.tfstate')
     IG.main()
