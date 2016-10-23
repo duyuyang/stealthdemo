@@ -46,13 +46,11 @@ resource "aws_instance" "web" {
   # We're going to launch into a private subnet
   subnet_id = "subnet-2746ee43"
 
+  # Copies the myapp.conf file to /etc/myapp.conf
+    provisioner "file" {
+        source = "config/ansible/wp_docker/docker-compose.yml"
+        destination = "/home/ubuntu/docker-compose.yml"
+    }
   # We run a remote provisioner on the instance after creating it.
   # In this case, we just install docker and start it.
-  provisioner "remote-exec" {
-    inline = [
-      "sudo apt-get update -y",
-      "sudo apt-get install -y git",
-      "git clone git://github.com/duyuyang/stealthdemo.git"
-    ]
-  }
 }
