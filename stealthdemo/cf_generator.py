@@ -22,7 +22,7 @@ from awacs.aws import Allow, Statement, Principal, Policy
 from awacs.sts import AssumeRole
 from awacs.s3 import GetObject, ListBucket
 
-class MyCloudformationTemplate(object):
+class ClfGenerator(object):
     def __init__(self):
         self.prefix = "dev"
         self.t = Template()
