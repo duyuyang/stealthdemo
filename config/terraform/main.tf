@@ -52,4 +52,10 @@ resource "aws_instance" "web" {
   # We're going to launch into a private subnet
   subnet_id = "subnet-2746ee43"
 
+  # Run a shell to ensure servers are available
+  provisioner "remote-exec" {
+    inline = [
+      "sudo apt-get update -y"
+    ]
+  }
 }
