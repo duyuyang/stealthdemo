@@ -1,5 +1,10 @@
 ---
 # tasks file for wp_compose
+- name : Copy docker-compose file to the hosts
+  copy:
+    src: "{{ role_path }}/files/docker-compose.yml"
+    dest: /home/ubuntu/docker-compose.yml
+
 - name: Run wordpress docker compose
   sudo: yes
   shell: "docker-compose -f {{ docker_compose_path }} up -d"
