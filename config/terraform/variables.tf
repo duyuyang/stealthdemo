@@ -23,6 +23,7 @@ variable "env" {
 
 variable "app" {
   description = "application name or stack name"
+  default = "wordpress"
 }
 
 variable "key_name" {
