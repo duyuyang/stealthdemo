@@ -25,6 +25,8 @@ terraform apply -var "aws_access_key=${AWS_ACCESS_KEY}" \
                 -var "aws_secret_key=${AWS_SECRET_KEY}" \
                 -var "num_servers=${num_servers}" \
                 -var "server_size=${server_size}" \
+                -var "env=${environment}" \
+                -var "app=${app_name}" \
                 config/terraform/
 
 echo "Generate inventory from terraform state"
@@ -33,10 +35,13 @@ python stealthdemo/inventory.py
 echo "Test the available hosts"
 ansible -i config/ansible/hosts -m ping all
 
-echo "Bootstrapping on the server"
-#ansible-playbook -i config/ansible/hosts config/ansible/wordpress/playbook.yml
+echo "Bootstrapping on the server, docker environment setup"
+
 ansible-playbook -i config/ansible/hosts config/ansible/docker/playbook.yml
-#ansible-playbook -i config/ansible/hosts config/ansible/wp_compose/wordpress.yml
+
+echo "Deploy application"
+ansible-playbook -i config/ansible/hosts config/ansible/wp_docker/playbook.yml
+
 
 echo "Get the load balancer DNS name to test"
 python stealthdemo/getelb.py

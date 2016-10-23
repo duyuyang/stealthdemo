@@ -10,8 +10,7 @@ resource "aws_elb" "web" {
 
   subnets         = ["subnet-7146ee15", "subnet-2272a454"]
   security_groups = ["sg-296c574d"]
-  instances       = ["${aws_instance.web.id}"]
-  count           = "${var.num_servers}"
+  instances       = ["${aws_instance.web.*.id}"]
 
   listener {
     instance_port     = 80
@@ -32,6 +31,7 @@ resource "aws_instance" "web" {
   }
 
   instance_type = "${var.server_size}"
+  count = "${var.num_servers}"
 
   # Lookup the correct AMI based on the region
   # we specified
@@ -39,13 +39,23 @@ resource "aws_instance" "web" {
 
   # The name of our SSH keypair we created above.
   key_name = "${var.key_name}"
+
   tags {
-      Name = "duy-wordpress"
+      Name = "duy-${var.app}"
+      sshUser= "ubuntu"
+      Environment = "${var.env}"
   }
+
   # Our Security group to allow HTTP and SSH access
   vpc_security_group_ids = ["sg-6f6c570b", "sg-086c576c"]
 
   # We're going to launch into a private subnet
   subnet_id = "subnet-2746ee43"
 
+  # Run a shell to ensure servers are available
+  provisioner "remote-exec" {
+    inline = [
+      "sudo apt-get update -y"
+    ]
+  }
 }

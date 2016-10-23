@@ -21,6 +21,14 @@ Terraform:
 Terraform python lib:
   https://github.com/jrbudnack/pterraform
 
+ansible-playbook -i config/ansible/hosts config/ansible/wordpress/playbook.yml
+
+ansible-playbook -i config/ansible/hosts config/ansible/docker/playbook.yml
+
+ansible-playbook -i config/ansible/hosts config/ansible/wp_docker/playbook.yml
+
+ansible-playbook -i config/ansible/hosts config/ansible/wp_compose/wordpress.yml
+
 Note
 ====
 
