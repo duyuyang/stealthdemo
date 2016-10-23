@@ -7,9 +7,12 @@ class Resources(object):
         self.tfstate = tfstate
 
     def _readtfstate(self):
-        with open(self.tfstate) as data_file:
-            data = json.load(data_file)
-        return data
+        try:
+            with open(self.tfstate) as data_file:
+                data = json.load(data_file)
+            return data
+        except IOError:
+            print "Failed to open terraform state!"
 
     def _get_resource(self):
         data = self._readtfstate()

@@ -16,7 +16,7 @@ requires = []
 
 def setup_package():
     setup(
-        name='ea-release',
+        name='cloudci',
         version=stealthdemo.__version__,
         description='The command line tool for cloud automation',
         url='https://bitbucket.org/duyuyang/stealthdemo',
