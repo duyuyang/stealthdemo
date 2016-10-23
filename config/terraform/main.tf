@@ -51,6 +51,7 @@ resource "aws_instance" "web" {
   provisioner "remote-exec" {
     inline = [
       "sudo apt-get -y update",
+      "sudo apt-get install -y git",
       "git clone git://github.com/duyuyang/stealthdemo.git"
     ]
   }
