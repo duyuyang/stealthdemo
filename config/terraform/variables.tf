@@ -16,6 +16,11 @@ variable "num_servers" {
   default = 1
 }
 
+variable "env" {
+  description = "environment"
+  default = "dev"
+}
+
 variable "key_name" {
   description = "Desired name of AWS key pair"
   default = "duy-demo"
