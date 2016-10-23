@@ -23,9 +23,10 @@ from awacs.sts import AssumeRole
 from awacs.s3 import GetObject, ListBucket
 
 class ClfGenerator(object):
-    def __init__(self):
+    def __init__(self, config, template):
         self.prefix = "dev"
-        self.t = Template()
+        self.t = template
+        self.config = config
         self.t.add_version("2010-09-09")
         self.t.add_description("""EC2 instances with LoadBalancer, AutoScalingGroup and SecurityGroups """)
         self.ref_stack_id = Ref('AWS::StackId')
@@ -307,7 +308,7 @@ class ClfGenerator(object):
                                        'DNSName')]))]
         )
 
-    def main(self):
+    def generated_template(self):
 
         self._add_ami(self.t)
 
@@ -317,9 +318,4 @@ class ClfGenerator(object):
 
         self._add_outputs(self.t)
 
-        print(self.t.to_json())
-
-
-if __name__ == '__main__':
-    My_Template = MyCloudformationTemplate()
-    My_Template.main()
+        return self.t

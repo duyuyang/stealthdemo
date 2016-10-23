@@ -2,6 +2,7 @@ import logging, argparse
 import yaml, sys
 from stealthdemo.cf_generator import ClfGenerator
 from stealthdemo import __version__
+from troposphere import Template
 
 def setup_logging(level):
     """
@@ -56,13 +57,27 @@ class CFDriver(object):
             self._logger.info("No such file or directory: %s"
                               % data_file)
 
+    def _save_template(self, template):
+        local_file = '/tmp/my_template.json'
+        try:
+            with open(local_file, 'w') as data_file:
+                data_file.write(template)
+        except IOError:
+            self._logger.info("Failed to write the template to: %s"
+                              % local_file)
+
     def main(self, args=None):
         if args is None:
             args = sys.argv[1:]
         parser = self._create_parser()
         parsed_args, remaining = parser.parse_known_args(args)
         data = self._get_config(parsed_args.input)
-        print data
+        self._logger.info("Input config data: %s"
+                          % data)
+        if data:
+            self.t = Template()
+            generator = ClfGenerator(config=data, template=self.t)
+            self._save_template(generator.generated_template().to_json())
 
 class CLIArgParser(argparse.ArgumentParser):
     Formatter = argparse.RawTextHelpFormatter
