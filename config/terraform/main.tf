@@ -39,7 +39,9 @@ resource "aws_instance" "web" {
 
   # The name of our SSH keypair we created above.
   key_name = "${var.key_name}"
-
+  tags {
+      Name = "duy-wordpress"
+  }
   # Our Security group to allow HTTP and SSH access
   vpc_security_group_ids = ["sg-6f6c570b", "sg-086c576c"]
 
@@ -71,7 +73,7 @@ resource "aws_instance" "web" {
       "sudo apt-get install -y ansible python-pip",
       "sudo pip install docker-compose==1.8.1",
       "sudo pip install docker-py==1.10.4",
-      "sudo pip install requests==2.7.0"      
+      "sudo pip install requests==2.7.0"
     ]
   }
   provisioner "remote-exec" {
