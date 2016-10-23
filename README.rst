@@ -13,21 +13,46 @@ in AWS account.
 Description
 ===========
 
+cloudci Usage:
+```
+$ cloudci -v
+$ cloudci -i config/cloudformation/demo.yml
+
+```
+cloud-automation Usage:
+```
+$ scripts/cloud-automation.sh wordpress dev 2 t2.micro
+```
+
+clean up
+```
+$ scripts/destroy.sh
+```
+
 Terraform:
-  1. does not create a cloudformation template to provision a stack
-  2. hard to clean up the environment
-  3. hard to manage per project or billing
+  1. provisioning load balancer and ec2 instance
+  2. create aws resources
 
 Terraform python lib:
   https://github.com/jrbudnack/pterraform
 
-ansible-playbook -i config/ansible/hosts config/ansible/wordpress/playbook.yml
-
-ansible-playbook -i config/ansible/hosts config/ansible/docker/playbook.yml
-
-ansible-playbook -i config/ansible/hosts config/ansible/wp_docker/playbook.yml
-
-ansible-playbook -i config/ansible/hosts config/ansible/wp_compose/wordpress.yml
+Ansible:
+  To instnall wordpress on server or used in dockerfile
+  ```
+  $ ansible-playbook -i config/ansible/hosts config/ansible/wordpress/playbook.yml
+  ```
+  To install docker on Ubuntu
+  ```
+  $ ansible-playbook -i config/ansible/hosts config/ansible/docker/playbook.yml
+  ```
+  To spin up docker-compose
+  ```
+  $ ansible-playbook -i config/ansible/hosts config/ansible/wp_docker/playbook.yml
+  ```
+  To spin up ansible docker server as a compose
+  ```
+  $ ansible-playbook -i config/ansible/hosts config/ansible/wp_compose/wordpress.yml
+  ```
 
 Note
 ====
