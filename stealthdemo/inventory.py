@@ -8,7 +8,7 @@ class InventoryGenerator(object):
         self.host = host
 
     def _readtfstate(self):
-        with open('terraform.tfstate') as data_file:
+        with open(self.tfstate) as data_file:
             data = json.load(data_file)
         return data
 
@@ -23,7 +23,7 @@ class InventoryGenerator(object):
         l.append('[wordpress]')
         l.append(ip)
         data = '\n'.join(l)
-        with open('config/ansible/wordpress/hosts', 'w') as data_file:
+        with open(self.host, 'w') as data_file:
             data_file.write(data)
 
     def _get_resource(self):
@@ -41,5 +41,5 @@ class InventoryGenerator(object):
 
 
 if __name__ == '__main__':
-    IG = InventoryGenerator('terraform.tfstate', 'config/ansible/hosts')
+    IG = InventoryGenerator('config/ansible/hosts', 'terraform.tfstate')
     IG.main()

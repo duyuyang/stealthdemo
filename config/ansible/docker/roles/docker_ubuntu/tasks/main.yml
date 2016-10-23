@@ -1,0 +1,64 @@
+---
+# tasks file for docker_ubuntu
+- name: Install required software
+  apt: name={{ item }} state=present
+  sudo: yes
+  with_items:
+    - apt-transport-https
+    - ca-certificates
+
+- name: Add Docker repository key
+  sudo: yes
+  apt_key:
+    id: "{{ apt_key_sig }}"
+    keyserver: "{{ apt_key_url }}"
+    state: present
+  register: add_repository_key
+  ignore_errors: true
+
+- name: Add Docker repository and update apt cache
+  sudo: yes
+  apt_repository:
+    repo: "{{ apt_repository }}"
+    mode: '644'
+    update_cache: yes
+    state: present
+
+- name: Install (or update) docker package
+  sudo: yes
+  apt:
+    name: "{{ docker_pkg_name }}"
+    state: "{{ 'latest' if update_docker_package else 'present' }}"
+    update_cache: yes
+    cache_valid_time: "{{ docker_apt_cache_valid_time }}"
+
+- name: Adding user ubuntu to group docker
+  sudo: yes
+  shell: "gpasswd -a ubuntu docker"
+
+# We must install pip via apt before we can use the pip module below
+- name: Install pip, python-dev package with apt
+  sudo: yes
+  apt:
+    pkg: "{{ item }}"
+    state: latest
+    update_cache: yes
+    cache_valid_time: "{{ docker_apt_cache_valid_time }}"
+  with_items:
+    - python-dev
+    - python-pip
+
+# Install specific version when set in the variables
+- name: Install specific pip, setuptools, docker-py and docker-compose with pip
+  sudo: yes
+  pip:
+    name: "{{ item.name }}"
+    state: present
+    version: "{{ item.version }}"
+  with_items:
+    - { name: pip, version: "{{ pip_version_pip }}", install: "{{ pip_install_pip }}" }
+    - { name: setuptools, version: "{{ pip_version_setuptools }}", install: "{{ pip_install_setuptools }}" }
+    - { name: docker-py, version: "{{ pip_version_docker_py }}", install: "{{ pip_install_docker_py }}" }
+    - { name: docker-compose, version: "{{ pip_version_docker_compose }}", install: "{{ pip_install_docker_compose }}" }
+    - { name: requests, version: "{{ pip_version_requests }}", install: "{{ pip_version_requests }}" }
+  when: (item.version!="latest" and item.install)
