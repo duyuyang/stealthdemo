@@ -39,13 +39,19 @@ resource "aws_instance" "web" {
 
   # The name of our SSH keypair we created above.
   key_name = "${var.key_name}"
-  tags {
-      Name = "duy-wordpress"
-  }
+
   # Our Security group to allow HTTP and SSH access
   vpc_security_group_ids = ["sg-6f6c570b", "sg-086c576c"]
 
   # We're going to launch into a private subnet
   subnet_id = "subnet-2746ee43"
 
+  # We run a remote provisioner on the instance after creating it.
+  # In this case, we just install docker and start it.
+  provisioner "remote-exec" {
+    inline = [
+      "sudo apt-get -y update",
+      "git clone git://github.com/duyuyang/stealthdemo.git"
+    ]
+  }
 }
