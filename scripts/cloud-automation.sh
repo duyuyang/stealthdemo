@@ -27,6 +27,16 @@ terraform apply -var "aws_access_key=${AWS_ACCESS_KEY}" \
                 -var "server_size=${server_size}" \
                 config/terraform/
 
-# clean up
-# terraform destroy -var "aws_access_key=${AWS_ACCESS_KEY}" -var "aws_secret_key=${AWS_SECRET_KEY}" config/terraform/
-# terraform apply -var "aws_access_key=${AWS_ACCESS_KEY}"   -var "aws_secret_key=${AWS_SECRET_KEY}" config/terraform/
+echo "Generate inventory from terraform state"
+python stealthdemo/inventory.py
+
+echo "Test the available hosts"
+ansible -i config/ansible/hosts -m ping all
+
+echo "Bootstrapping on the server"
+#ansible-playbook -i config/ansible/hosts config/ansible/wordpress/playbook.yml
+ansible-playbook -i config/ansible/hosts config/ansible/docker/playbook.yml
+#ansible-playbook -i config/ansible/hosts config/ansible/wp_compose/wordpress.yml
+
+echo "Get the load balancer DNS name to test"
+python stealthdemo/getelb.py

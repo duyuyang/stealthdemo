@@ -39,38 +39,13 @@ resource "aws_instance" "web" {
 
   # The name of our SSH keypair we created above.
   key_name = "${var.key_name}"
-
+  tags {
+      Name = "duy-wordpress"
+  }
   # Our Security group to allow HTTP and SSH access
   vpc_security_group_ids = ["sg-6f6c570b", "sg-086c576c"]
 
   # We're going to launch into a private subnet
   subnet_id = "subnet-2746ee43"
 
-  # We run a remote provisioner on the instance after creating it.
-  # In this case, we just install docker and start it.
-  provisioner "remote-exec" {
-    inline = [
-      "sudo apt-get -y update",
-      "sudo apt-get -y install apt-transport-https ca-certificates",
-      "sudo apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D",
-      "sudo touch /etc/apt/sources.list.d/docker.list",
-      "sudo chmod 0666 /etc/apt/sources.list.d/docker.list",
-      "sudo echo 'deb https://apt.dockerproject.org/repo ubuntu-trusty main' > /etc/apt/sources.list.d/docker.list",
-      "sudo apt-get -y update",
-      "apt-cache policy docker-engine",
-      "sudo apt-get -y update",
-      "sudo apt-get install -y linux-image-extra-$(uname -r) linux-image-extra-virtual",
-      "sudo apt-get install -y docker-engine",
-      "sudo gpasswd -a ubuntu docker",
-      "sudo service docker restart",
-      "sudo apt-add-repository ppa:ansible/ansible -y",
-      "sudo apt-get -y update",
-      "sudo apt-get install -y ansible python-pip",
-      "sudo pip install docker-compose==1.8.1",
-      "sudo pip install docker-py==1.10.4",
-      "sudo pip install requests==2.7.0",
-      "git clone git://github.com/duyuyang/stealthdemo.git",
-      "docker-compose -f stealthdemo/config/ansible/wp_compose/docker-compose.yml up -d"
-    ]
-  }
 }

@@ -18,4 +18,4 @@ scale_min: 1
 sshkey: 'duy-demo'
 
 app_name: 'wordpress'
-app_version: '0.0.1'
+app_version: 'latest'
