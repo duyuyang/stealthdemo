@@ -1,5 +1,6 @@
 import logging, argparse
 import yaml, sys
+from util import AwsUtils
 from stealthdemo.cf_generator import ClfGenerator
 from stealthdemo import __version__
 from troposphere import Template
@@ -43,6 +44,7 @@ class CFDriver(object):
 
     def __init__(self):
         self._logger = setup_logging("debug")
+        self._aws_util = AwsUtils('duy', self._logger)
 
     def _create_parser(self):
         parser = CLIArgParser()
@@ -62,22 +64,50 @@ class CFDriver(object):
         try:
             with open(local_file, 'w') as data_file:
                 data_file.write(template)
+            self._logger.info("CloudFormation template saved!")
         except IOError:
             self._logger.info("Failed to write the template to: %s"
                               % local_file)
+
+    def _create_stack(self, template):
+        self._client = self._aws_util.get_clf_connection()
+        #try:
+        response = self._client.create_stack(
+            StackName='test-stack',
+            TemplateBody=template,
+            DisableRollback=True,
+            TimeoutInMinutes=123,
+            Capabilities=['CAPABILITY_NAMED_IAM'],
+            Tags=[
+                {
+                    'Key': 'Owner',
+                    'Value': 'Du Y'
+                }
+            ]
+        )
+        self._logger.info("created stack: %s" % response)
+        #except:
+        #    self._logger.info("Create stack failed!")
 
     def main(self, args=None):
         if args is None:
             args = sys.argv[1:]
         parser = self._create_parser()
         parsed_args, remaining = parser.parse_known_args(args)
-        data = self._get_config(parsed_args.input)
+        self.data = self._get_config(parsed_args.input)
         self._logger.info("Input config data: %s"
-                          % data)
-        if data:
+                          % self.data)
+        if self.data:
             self.t = Template()
-            generator = ClfGenerator(config=data, template=self.t)
-            self._save_template(generator.generated_template().to_json())
+            generator = ClfGenerator(config=self.data,
+                                     template=self.t)
+            self._logger.info("Template generated")
+            template = generator.generated_template().to_json()
+            #self._save_template(template)
+            self._logger.info("Print out template: %s" % str(template))
+            if len(template) > 0:
+                self._create_stack(str(template))
+
 
 class CLIArgParser(argparse.ArgumentParser):
     Formatter = argparse.RawTextHelpFormatter
