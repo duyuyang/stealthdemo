@@ -11,7 +11,6 @@ resource "aws_elb" "web" {
   subnets         = ["subnet-7146ee15", "subnet-2272a454"]
   security_groups = ["sg-296c574d"]
   instances       = ["${aws_instance.web.id}"]
-  count           = "${var.num_servers}"
 
   listener {
     instance_port     = 80
@@ -32,7 +31,8 @@ resource "aws_instance" "web" {
   }
 
   instance_type = "${var.server_size}"
-
+  count         = "${var.num_servers}"
+  
   # Lookup the correct AMI based on the region
   # we specified
   ami = "${lookup(var.aws_amis, var.aws_region)}"
