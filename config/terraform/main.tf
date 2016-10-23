@@ -50,7 +50,7 @@ resource "aws_instance" "web" {
   # In this case, we just install docker and start it.
   provisioner "remote-exec" {
     inline = [
-      "sudo apt-get -y update",
+      "sudo apt-get update -y",
       "sudo apt-get install -y git",
       "git clone git://github.com/duyuyang/stealthdemo.git"
     ]
