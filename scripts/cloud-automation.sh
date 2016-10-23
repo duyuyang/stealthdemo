@@ -36,6 +36,7 @@ ansible -i config/ansible/hosts -m ping all
 echo "Bootstrapping on the server"
 #ansible-playbook -i config/ansible/hosts config/ansible/wordpress/playbook.yml
 ansible-playbook -i config/ansible/hosts config/ansible/docker/playbook.yml
+ansible-playbook -i config/ansible/hosts config/ansible/wp_docker/playbook.yml
 #ansible-playbook -i config/ansible/hosts config/ansible/wp_compose/wordpress.yml
 
 echo "Get the load balancer DNS name to test"

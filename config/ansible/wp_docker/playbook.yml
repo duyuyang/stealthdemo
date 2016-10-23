@@ -1,0 +1,5 @@
+---
+- name: Run wordpress docker
+  hosts: wordpress
+  roles:
+    - wp_compose

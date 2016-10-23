@@ -3,4 +3,3 @@
   hosts: wordpress
   roles:
     - docker_ubuntu
-    - wp_compose
