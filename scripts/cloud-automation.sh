@@ -25,6 +25,8 @@ terraform apply -var "aws_access_key=${AWS_ACCESS_KEY}" \
                 -var "aws_secret_key=${AWS_SECRET_KEY}" \
                 -var "num_servers=${num_servers}" \
                 -var "server_size=${server_size}" \
+                -var "env=${environment}" \
+                -var "app=${app_name}" \
                 config/terraform/
 
 echo "Generate inventory from terraform state"

@@ -41,7 +41,7 @@ resource "aws_instance" "web" {
   key_name = "${var.key_name}"
 
   tags {
-      Name = "duy-wordpress"
+      Name = "duy-${var.app}"
       sshUser= "ubuntu"
       Environment = "${var.env}"
   }

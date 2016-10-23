@@ -21,6 +21,10 @@ variable "env" {
   default = "dev"
 }
 
+variable "app" {
+  description = "application name or stack name"
+}
+
 variable "key_name" {
   description = "Desired name of AWS key pair"
   default = "duy-demo"
