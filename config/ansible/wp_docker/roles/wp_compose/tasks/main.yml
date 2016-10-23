@@ -1,4 +1,5 @@
 ---
 # tasks file for wp_compose
 - name: Run wordpress docker compose
+  sudo: yes
   shell: "docker-compose -f {{ docker_compose_path }} up -d"
