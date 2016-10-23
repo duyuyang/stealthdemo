@@ -41,18 +41,25 @@ Terraform python lib:
 
 Ansible:
   To instnall wordpress on server or used in dockerfile
+
   ```
   $ ansible-playbook -i config/ansible/hosts config/ansible/wordpress/playbook.yml
   ```
+
   To install docker on Ubuntu
+
   ```
   $ ansible-playbook -i config/ansible/hosts config/ansible/docker/playbook.yml
   ```
+
   To spin up docker-compose
+
   ```
   $ ansible-playbook -i config/ansible/hosts config/ansible/wp_docker/playbook.yml
   ```
+
   To spin up ansible docker server as a compose
+  
   ```
   $ ansible-playbook -i config/ansible/hosts config/ansible/wp_compose/wordpress.yml
   ```
